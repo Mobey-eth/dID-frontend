@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 import { Navbar, Nav, Button, Container } from "react-bootstrap";
-import market from "./market.png";
 
 const Navigation = ({ web3Handler, account }) => {
   return (
-    <Navbar expand="lg" bg="secondary" variant="dark">
+    <Navbar expand="lg" bg="success" variant="dark">
       <Container>
-        <Navbar.Brand href="http://www.dappuniversity.com/bootcamp">
-          <img src={market} width="40" height="40" className="" alt="" />
+        <Navbar.Brand href="/">
+          <img src="https://upload.wikimedia.org/wikipedia/en/1/16/FUTO_logo.png" width="40" height="40" className="" alt="" />
           &nbsp; DECENTRALIZED ID
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />

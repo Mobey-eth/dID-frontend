@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { ethers } from "ethers";
-import { Row, Form, Button } from "react-bootstrap";
+import { Row, Form, Button, Col, Container,Image, Stack } from "react-bootstrap";
+import img from './green.jpg'
 import { create as ipfsHttpClient } from "ipfs-http-client";
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
+
 
 const Create = ({ marketplace, nft }) => {
   const [image, setImage] = useState("");
@@ -46,8 +48,54 @@ const Create = ({ marketplace, nft }) => {
     await (await marketplace.makeItem(nft.address, id, listingPrice)).wait();
   };
   return (
-    <div className="container-fluid mt-5">
-      <div className="row">
+    <div className="">
+      <Row className="m-2">
+        <Col xs={6} md={4}>
+          <Image src="./green.jpg" rounded style={{width:'100%', height:'100%'}}/>
+        </Col>
+        <Col className="mt-4">
+          <Container>
+        <Stack gap={3}>
+          <div className="row">
+          <main
+            role="main"
+            className="col-lg-12 mx-auto"
+            style={{ maxWidth: "1000px" }}
+          >
+            <div className="content mx-auto">
+              <Row className="g-4">
+
+                <Form.Control
+                  onChange={(e) => setName(e.target.value)}
+                  size="lg"
+                  required
+                  type="text"
+                  placeholder="Name"
+                />
+                <Form.Control
+                  onChange={(e) => setDescription(e.target.value)}
+                  size="lg"
+                  required
+                  type="text"
+                  placeholder="Department"
+                />
+                <Form.Control
+                  onChange={(e) => setPrice(e.target.value)}
+                  size="lg"
+                  required
+                  type="number"
+                  placeholder="Registration Number"
+                />
+                <div className="d-grid px-0">
+                  <Button onClick={createNFT} size="lg" variant="outline-success">
+                    Create Profile!
+                  </Button>
+                </div>
+              </Row>
+            </div>
+          </main>
+          </div>  
+          <div className="row">
         <main
           role="main"
           className="col-lg-12 mx-auto"
@@ -55,12 +103,6 @@ const Create = ({ marketplace, nft }) => {
         >
           <div className="content mx-auto">
             <Row className="g-4">
-              <Form.Control
-                type="file"
-                required
-                name="file"
-                onChange={uploadToIPFS}
-              />
               <Form.Control
                 onChange={(e) => setName(e.target.value)}
                 size="lg"
@@ -72,7 +114,7 @@ const Create = ({ marketplace, nft }) => {
                 onChange={(e) => setDescription(e.target.value)}
                 size="lg"
                 required
-                as="textarea"
+                type="text"
                 placeholder="Department"
               />
               <Form.Control
@@ -90,7 +132,11 @@ const Create = ({ marketplace, nft }) => {
             </Row>
           </div>
         </main>
-      </div>
+        </div> 
+        </Stack>
+        </Container>
+      </Col>
+      </Row>
     </div>
   );
 };
