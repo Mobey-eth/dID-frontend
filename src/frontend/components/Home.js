@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { ethers } from "ethers"
-import { Row, Col, Card, Button } from 'react-bootstrap'
+import { Row, Col, Card, Button, Stack, Container } from 'react-bootstrap';
+import './Home.css';
 
 const Home = ({ marketplace, nft }) => {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [items, setItems] = useState([])
   const loadMarketplaceItems = async () => {
     // Load all unsold items
@@ -48,7 +49,7 @@ const Home = ({ marketplace, nft }) => {
     </main>
   )
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center home_body" style={{height:'100vh'}}>
       {items.length > 0 ?
         <div className="px-5 container">
           <Row xs={1} md={2} lg={4} className="g-4 py-5">
@@ -75,9 +76,15 @@ const Home = ({ marketplace, nft }) => {
           </Row>
         </div>
         : (
-          <main style={{ padding: "1rem 0" }}>
-            <h2>No listed assets</h2>
-          </main>
+          <Container className=' h-100 w-100 padding' >
+            <Stack gap={3} className=''>
+              <div className="p-2"><h1 className='text-white'> Welcome To Federal Univeristy Of Owerri</h1></div>
+              <div><p className='text-white'>Make education your dream and it will help you to fufill your dream</p></div>
+              <div className='text-white'>Education takes us to the heights of success</div>
+              <div className='m-6'><Button variant="success" size="lg" style={{width:'10rem'}}>Connect</Button></div>
+            </Stack>
+          </Container>
+
         )}
     </div>
   );

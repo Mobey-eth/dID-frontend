@@ -1,0 +1,9 @@
+.home_body {
+    background-image: url("../assets/heyy.jpg");
+    background-repeat: no-repeat;
+    object-fit: cover;
+    overflow: hidden;
+  }
+  .padding{
+    padding: 100px;
+  }
