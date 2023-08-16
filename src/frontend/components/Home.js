@@ -81,7 +81,7 @@ const Home = ({ marketplace, nft }) => {
               <div className="p-2"><h1 className='text-white'> Welcome To Federal Univeristy Of Owerri</h1></div>
               <div><p className='text-white'>Make education your dream and it will help you to fufill your dream</p></div>
               <div className='text-white'>Education takes us to the heights of success</div>
-              <div className='m-6'><Button variant="success" size="lg" style={{width:'10rem'}}>Connect</Button></div>
+              <div className='m-6'><Button variant="success" size="xl" style={{width:'10rem'}}>Connect Wallet</Button></div>
             </Stack>
           </Container>
 

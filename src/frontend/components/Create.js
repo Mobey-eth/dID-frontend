@@ -88,7 +88,7 @@ const Create = ({ marketplace, nft }) => {
                 />
                 <div className="d-grid px-0">
                   <Button onClick={createNFT} size="lg" variant="outline-success">
-                    Create Profile!
+                    Create Student ID
                   </Button>
                 </div>
               </Row>
@@ -108,25 +108,25 @@ const Create = ({ marketplace, nft }) => {
                 size="lg"
                 required
                 type="text"
-                placeholder="Name"
+                placeholder="Wallet Address"
               />
               <Form.Control
                 onChange={(e) => setDescription(e.target.value)}
                 size="lg"
                 required
                 type="text"
-                placeholder="Department"
+                placeholder="Document Name"
               />
               <Form.Control
                 onChange={(e) => setPrice(e.target.value)}
                 size="lg"
                 required
                 type="number"
-                placeholder="Registration Number"
+                placeholder="Document Link"
               />
               <div className="d-grid px-0">
-                <Button onClick={createNFT} variant="primary" size="lg">
-                  Create Profile!
+                <Button onClick={createNFT} variant="success" size="lg">
+                  Create Student Profile
                 </Button>
               </div>
             </Row>
