@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { Row, Col, Card, Form, Button, Container,Stack } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  Container,
+  Stack,
+} from "react-bootstrap";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
-
 
 function renderSoldItems(items) {
   return (
@@ -25,7 +32,54 @@ function renderSoldItems(items) {
   );
 }
 
-export default function MyListedItems({ marketplace, nft, account }) {
+export default function MyListedItems({
+  marketplace,
+  nft,
+  account,
+  dIDcontract,
+  signer,
+}) {
+  ///////////// newer logic
+  // new logic
+  const [stakeError, setStakeError] = useState("");
+  const [stakeSuccess, setStakeSuccess] = useState("");
+  const [transactionData, settransactionData] = useState("");
+  const [regNo, setRegno] = useState(null);
+  const [Name, setNamee] = useState("");
+  const [department, setDepartment] = useState("");
+  const [walet, setWallet] = useState("");
+
+  const stakeCACHandler = async () => {
+    setStakeError("");
+    setStakeSuccess("");
+    try {
+      const stakeContractWSigner = dIDcontract.connect(signer);
+      const resp = await stakeContractWSigner.approve(walet);
+      console.log(resp);
+      settransactionData(resp.hash);
+      setStakeSuccess(`Student successfully Approved at ${transactionData}`);
+    } catch (e) {
+      console.log("Error: " + e);
+      setStakeError(e.message);
+    }
+  };
+
+  const profileCACHandler = async () => {
+    setStakeError("");
+    setStakeSuccess("");
+    try {
+      const profileContractWSigner = dIDcontract.connect(signer);
+      const resp = await profileContractWSigner.mint(Name, regNo, department);
+      console.log(resp);
+      settransactionData(resp.hash);
+      setStakeSuccess(`Student successfully created at ${transactionData}`);
+    } catch (e) {
+      console.log("Error: " + e);
+      setStakeError(e.message);
+    }
+  };
+
+  //////////// old logic
   const [loading, setLoading] = useState(false);
   const [listedItems, setListedItems] = useState([]);
   const [soldItems, setSoldItems] = useState([]);
@@ -113,7 +167,7 @@ export default function MyListedItems({ marketplace, nft, account }) {
     );
   return (
     <div className="flex justify-center">
-      {listedItems.length > 0 ? (
+      {/* {listedItems.length > 0 ? (
         <div className="px-5 py-3 container">
           <h2>Listed</h2>
           <Row xs={1} md={2} lg={4} className="g-4 py-3">
@@ -130,91 +184,89 @@ export default function MyListedItems({ marketplace, nft, account }) {
           </Row>
           {soldItems.length > 0 && renderSoldItems(soldItems)}
         </div>
-      ) : (
+      ) : ( */}
       <Container className="mt-4">
         <Stack gap={3}>
           <div className="row">
-          <main
-            role="main"
-            className="col-lg-12 mx-auto"
-            style={{ maxWidth: "1000px" }}
-          >
-            <div className="content mx-auto">
-              <Row className="g-4">
-
-                <Form.Control
-                  onChange={(e) => setName(e.target.value)}
-                  size="lg"
-                  required
-                  type="text"
-                  placeholder="Name"
-                />
-                <Form.Control
-                  onChange={(e) => setDescription(e.target.value)}
-                  size="lg"
-                  required
-                  type="text"
-                  placeholder="Department"
-                />
-                <Form.Control
-                  onChange={(e) => setPrice(e.target.value)}
-                  size="lg"
-                  required
-                  type="number"
-                  placeholder="Registration Number"
-                />
-                <div className="d-grid px-0">
-                  <Button onClick={createNFT} variant="success" size="lg">
-                    Create Profile!
-                  </Button>
-                </div>
-              </Row>
-            </div>
-          </main>
-          </div>  
-          <div className="row">
-        <main
-          role="main"
-          className="col-lg-12 mx-auto"
-          style={{ maxWidth: "1000px" }}
-        >
-          <div className="content mx-auto">
-            <Row className="g-4">
-
-              <Form.Control
-                onChange={(e) => setName(e.target.value)}
-                size="lg"
-                required
-                type="text"
-                placeholder="Name"
-              />
-              <Form.Control
-                onChange={(e) => setDescription(e.target.value)}
-                size="lg"
-                required
-                type="text"
-                placeholder="Department"
-              />
-              <Form.Control
-                onChange={(e) => setPrice(e.target.value)}
-                size="lg"
-                required
-                type="number"
-                placeholder="Registration Number"
-              />
-              <div className="d-grid px-0">
-                <Button onClick={createNFT} variant="success" size="lg">
-                  Create Profile!
-                </Button>
+            <main
+              role="main"
+              className="col-lg-12 mx-auto"
+              style={{ maxWidth: "1000px" }}
+            >
+              <div className="content mx-auto">
+                <Row className="g-4">
+                  <Form.Control
+                    onChange={(e) => setWallet(e.target.value)}
+                    size="lg"
+                    required
+                    type="text"
+                    placeholder="input student address "
+                  />
+                  <div className="d-grid px-0">
+                    <Button
+                      onClick={stakeCACHandler}
+                      variant="success"
+                      size="lg"
+                    >
+                      Approve Student
+                    </Button>
+                    <div className="mt-5">
+                      {stakeError && (
+                        <div className="withdraw-error">{stakeError}</div>
+                      )}
+                      {stakeSuccess && (
+                        <div className="withdraw-success">{stakeSuccess}</div>
+                      )}{" "}
+                    </div>
+                  </div>
+                </Row>
               </div>
-            </Row>
+            </main>
           </div>
-        </main>
-        </div> 
+          <div className="row">
+            <main
+              role="main"
+              className="col-lg-12 mx-auto"
+              style={{ maxWidth: "1000px" }}
+            >
+              <div className="content mx-auto">
+                <Row className="g-4">
+                  <Form.Control
+                    onChange={(e) => setNamee(e.target.value)}
+                    size="lg"
+                    required
+                    type="text"
+                    placeholder="Name"
+                  />
+                  <Form.Control
+                    onChange={(e) => setDepartment(e.target.value)}
+                    size="lg"
+                    required
+                    type="text"
+                    placeholder="Department"
+                  />
+                  <Form.Control
+                    onChange={(e) => setRegno(e.target.value)}
+                    size="lg"
+                    required
+                    type="number"
+                    placeholder="Registration Number"
+                  />
+                  <div className="d-grid px-0">
+                    <Button
+                      onClick={profileCACHandler}
+                      variant="success"
+                      size="lg"
+                    >
+                      Create Student
+                    </Button>
+                  </div>
+                </Row>
+              </div>
+            </main>
+          </div>
         </Stack>
       </Container>
-
-      )}
     </div>
   );
 }
