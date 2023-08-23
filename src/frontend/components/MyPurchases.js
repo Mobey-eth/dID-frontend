@@ -14,77 +14,74 @@ import image2 from "../assets/image2.jpg";
 import image3 from "../assets/image3.jpg";
 
 export default function MyPurchases({ dIDcontract, signer, account }) {
-  // const [stakeError, setStakeError] = useState("");
-  // const [stakeSuccess, setStakeSuccess] = useState("");
-  // const [transactionData, settransactionData] = useState("");
-  // const [docName, setDocName] = useState("");
-  // const [docLink, setDocLink] = useState("");
   const [walet, setWallet] = useState("");
+  const [documentLinks, setDocumentLinks] = useState([]);
 
   const viewCAC = async () => {
-    // setStakeError("");
-    // setStakeSuccess("");
     try {
       const stakeContractWSigner = dIDcontract.connect(signer);
-      const resp = await stakeContractWSigner.listProfiles(walet);
-      console.log(resp);
-      console.log(account);
+      const documentCount = await stakeContractWSigner.studentProfileCount(
+        account
+      );
+      const documentLinks = await stakeContractWSigner.listProfiles(account);
+      setDocumentLinks(documentLinks);
+      console.log(`This is docList : ${documentLinks}`);
+      console.log(`This is my docCount ${documentCount}`);
     } catch (e) {
-      console.log("Error: " + e);
+      console.log("Error fetching documents: " + e);
     }
   };
+
+  useEffect(() => {
+    viewCAC();
+  }, []); // Fetch documents when the component mounts
+
+  // Helper function to get title and description based on index
+  const getDocumentInfo = (index) => {
+    switch (index) {
+      case 0:
+        return { title: "Bio Data", description: "Student Bio Data." };
+      case 1:
+        return {
+          title: "Admission Confirmation",
+          description: "Some quick example text to build on the card title.",
+        };
+      case 2:
+        return {
+          title: "School Fees Receipt",
+          description: "Another example description here.",
+        };
+      default:
+        return { title: "Document", description: "Document description." };
+    }
+  };
+
   return (
     <div className="flex justify-center">
       <Container className="mt-4">
         <Row>
-          <Col>
-            <Card style={{ width: "20rem" }} border="success">
-              <Card.Img variant="top" src={image1} />
-              <Card.Body>
-                <Card.Title>Bio Data</Card.Title>
-                <Card.Text>Student Bio Data.</Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col>
-            <Card style={{ width: "20rem" }} border="success">
-              <Card.Img variant="top" src={image2} />
-              <Card.Body>
-                <Card.Title>Admission Confirmation</Card.Title>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col>
-            <Card style={{ width: "20rem" }} border="success">
-              <Card.Img variant="top" src={image3} />
-              <Card.Body>
-                <Card.Title>School Fees Recipt</Card.Title>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-          {/* <div className="mt-5">
-            <Form.Control
-              onChange={(e) => setWallet(e.target.value)}
-              size="lg"
-              required
-              type="text"
-              placeholder="input student address "
-            />
-            <div className="d-grid px-0">
-              <Button onClick={viewCAC} variant="success" size="lg">
-                View Information
-              </Button>
-            </div>
-          </div> */}
+          {documentLinks.map((link, index) => {
+            const { title, description } = getDocumentInfo(index);
+            return (
+              <Col key={index}>
+                <Card style={{ width: "20rem" }} border="success">
+                  <Card.Img variant="top" src={link} />
+                  <Card.Body>
+                    <Card.Title>{title}</Card.Title>
+                    <Card.Text>{description}</Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            );
+          })}
         </Row>
+        <div className="mt-5">
+          <div className="d-grid px-0">
+            <Button onClick={viewCAC} variant="success" size="lg">
+              Refresh Documents
+            </Button>
+          </div>
+        </div>
       </Container>
     </div>
   );
