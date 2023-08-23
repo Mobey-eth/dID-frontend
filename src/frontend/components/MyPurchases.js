@@ -40,16 +40,19 @@ export default function MyPurchases({ dIDcontract, signer, account }) {
   const getDocumentInfo = (index) => {
     switch (index) {
       case 0:
-        return { title: "Bio Data", description: "Student Bio Data." };
+        return {
+          title: "Bio Data",
+          description: "Student Bio Data on portal dashboard.",
+        };
       case 1:
         return {
           title: "Admission Confirmation",
-          description: "Some quick example text to build on the card title.",
+          description: "Student Confirmation of admission",
         };
       case 2:
         return {
-          title: "School Fees Receipt",
-          description: "Another example description here.",
+          title: "Department Reciept",
+          description: "Student Departmental Reciept.",
         };
       default:
         return { title: "Document", description: "Document description." };
