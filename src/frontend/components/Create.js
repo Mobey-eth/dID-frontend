@@ -229,7 +229,7 @@ const Create = ({ marketplace, nft, dIDcontract, signer }) => {
                           variant="success"
                           size="lg"
                         >
-                          Create Student Profile
+                          ADD DOCUMENT
                         </Button>
                       </div>
                     </Row>

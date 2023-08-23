@@ -359,7 +359,7 @@ export default function MyListedItems({
                   />
                   <div className="d-grid px-0">
                     <Button onClick={docCACHandler} variant="success" size="lg">
-                      Create Student Profile
+                      ADD DOCUMENT
                     </Button>
                   </div>
                 </Row>
