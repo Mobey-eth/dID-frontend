@@ -60,20 +60,33 @@ export default function MyPurchases({ dIDcontract, signer, account }) {
     <div className="flex justify-center">
       <Container className="mt-4">
         <Row>
-          {documentLinks.map((link, index) => {
-            const { title, description } = getDocumentInfo(index);
-            return (
-              <Col key={index}>
-                <Card style={{ width: "20rem" }} border="success">
-                  <Card.Img variant="top" src={link} />
-                  <Card.Body>
-                    <Card.Title>{title}</Card.Title>
-                    <Card.Text>{description}</Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            );
-          })}
+          {documentLinks.length > 0 ? (
+            documentLinks.map((link, index) => {
+              const { title, description } = getDocumentInfo(index);
+              return (
+                <Col key={index}>
+                  <Card style={{ width: "20rem" }} border="success">
+                    <Card.Img variant="top" src={link} />
+                    <Card.Body>
+                      <Card.Title>{title}</Card.Title>
+                      <Card.Text>{description}</Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              );
+            })
+          ) : (
+            <Col>
+              <Card style={{ width: "20rem" }} border="info">
+                <Card.Body>
+                  <Card.Title>No Documents Uploaded Yet</Card.Title>
+                  <Card.Text>
+                    Upload your documents to view them here.
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          )}
         </Row>
         <div className="mt-5">
           <div className="d-grid px-0">
