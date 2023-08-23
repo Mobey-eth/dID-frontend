@@ -88,7 +88,9 @@ const Create = ({ marketplace, nft, dIDcontract, signer }) => {
       const resp = await stakeContractWSigner.mint(Name, regNo, department);
       console.log(resp);
       settransactionData(resp.hash);
-      setStakeSuccess(`Student successfully created at ${transactionData}`);
+      setStakeSuccess(
+        `Student successfully created at\n https://mumbai.polygonscan.com/tx/${transactionData}`
+      );
     } catch (e) {
       console.log("Error: " + e);
       setStakeError(e.message);
@@ -121,7 +123,9 @@ const Create = ({ marketplace, nft, dIDcontract, signer }) => {
       );
       console.log(resp);
       settransactionData(resp.hash);
-      setStakeSuccess(`Student successfully created at ${transactionData}`);
+      setStakeSuccess(
+        `Student Document successfully created at \n https://mumbai.polygonscan.com/tx/${transactionData}`
+      );
     } catch (e) {
       console.log("Error: " + e);
       setStakeError(e.message);

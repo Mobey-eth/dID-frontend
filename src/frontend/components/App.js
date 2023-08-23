@@ -112,8 +112,8 @@ function App() {
                 path="/my-purchases"
                 element={
                   <MyPurchases
-                    marketplace={marketplace}
-                    nft={nft}
+                    dIDcontract={stakingContract}
+                    signer={signerr}
                     account={account}
                   />
                 }

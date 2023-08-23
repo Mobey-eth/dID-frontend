@@ -48,6 +48,8 @@ export default function MyListedItems({
   const [Name, setNamee] = useState("");
   const [department, setDepartment] = useState("");
   const [walet, setWallet] = useState("");
+  const [docName, setDocName] = useState("");
+  const [docLink, setDocLink] = useState("");
 
   const stakeCACHandler = async () => {
     setStakeError("");
@@ -57,7 +59,27 @@ export default function MyListedItems({
       const resp = await stakeContractWSigner.approve(walet);
       console.log(resp);
       settransactionData(resp.hash);
-      setStakeSuccess(`Student successfully Approved at ${transactionData}`);
+      setStakeSuccess(
+        `Student successfully Approved at \n https://mumbai.polygonscan.com/tx/${transactionData}`
+      );
+    } catch (e) {
+      console.log("Error: " + e);
+      setStakeError(e.message);
+    }
+  };
+
+  const revokeCACHandler = async () => {
+    setStakeError("");
+    setStakeSuccess("");
+    try {
+      const revokeContractWSigner = dIDcontract.connect(signer);
+      const resp = await revokeContractWSigner.revokeApprove(walet);
+      console.log(resp);
+      // console.log(signer);
+      settransactionData(resp.hash);
+      setStakeSuccess(
+        `Student approval successfully revoked at\n https://mumbai.polygonscan.com/tx/${transactionData}`
+      );
     } catch (e) {
       console.log("Error: " + e);
       setStakeError(e.message);
@@ -72,7 +94,30 @@ export default function MyListedItems({
       const resp = await profileContractWSigner.mint(Name, regNo, department);
       console.log(resp);
       settransactionData(resp.hash);
-      setStakeSuccess(`Student successfully created at ${transactionData}`);
+      setStakeSuccess(
+        `Student successfully created at \n https://mumbai.polygonscan.com/tx/${transactionData}`
+      );
+    } catch (e) {
+      console.log("Error: " + e);
+      setStakeError(e.message);
+    }
+  };
+
+  const docCACHandler = async () => {
+    setStakeError("");
+    setStakeSuccess("");
+    try {
+      const docContractWSigner = dIDcontract.connect(signer);
+      const resp = await docContractWSigner.createProfile(
+        walet,
+        docName,
+        docLink
+      );
+      console.log(resp);
+      settransactionData(resp.hash);
+      setStakeSuccess(
+        `Student Document successfully created at \n https://mumbai.polygonscan.com/tx/${transactionData}`
+      );
     } catch (e) {
       console.log("Error: " + e);
       setStakeError(e.message);
@@ -210,6 +255,7 @@ export default function MyListedItems({
                     >
                       Approve Student
                     </Button>
+
                     <div className="mt-5">
                       {stakeError && (
                         <div className="withdraw-error">{stakeError}</div>
@@ -218,6 +264,23 @@ export default function MyListedItems({
                         <div className="withdraw-success">{stakeSuccess}</div>
                       )}{" "}
                     </div>
+                  </div>
+
+                  <Form.Control
+                    onChange={(e) => setWallet(e.target.value)}
+                    size="lg"
+                    required
+                    type="text"
+                    placeholder="input student address "
+                  />
+                  <div className="d-grid px-0">
+                    <Button
+                      onClick={revokeCACHandler}
+                      variant="success"
+                      size="lg"
+                    >
+                      Revoke Student Approval
+                    </Button>
                   </div>
                 </Row>
               </div>
@@ -229,7 +292,7 @@ export default function MyListedItems({
               className="col-lg-12 mx-auto"
               style={{ maxWidth: "1000px" }}
             >
-              <div className="content mx-auto">
+              <div className="content mx-auto mt-5">
                 <Row className="g-4">
                   <Form.Control
                     onChange={(e) => setNamee(e.target.value)}
@@ -259,6 +322,44 @@ export default function MyListedItems({
                       size="lg"
                     >
                       Create Student
+                    </Button>
+                  </div>
+                </Row>
+              </div>
+            </main>
+          </div>
+          <div className="row mt-5">
+            <main
+              role="main"
+              className="col-lg-12 mx-auto"
+              style={{ maxWidth: "1000px" }}
+            >
+              <div className="content mx-auto">
+                <Row className="g-4">
+                  <Form.Control
+                    onChange={(e) => setWallet(e.target.value)}
+                    size="lg"
+                    required
+                    type="text"
+                    placeholder="Wallet Address"
+                  />
+                  <Form.Control
+                    onChange={(e) => setDocName(e.target.value)}
+                    size="lg"
+                    required
+                    type="text"
+                    placeholder="Document Name"
+                  />
+                  <Form.Control
+                    onChange={(e) => setDocLink(e.target.value)}
+                    size="lg"
+                    required
+                    type="text"
+                    placeholder="Document Link"
+                  />
+                  <div className="d-grid px-0">
+                    <Button onClick={docCACHandler} variant="success" size="lg">
+                      Create Student Profile
                     </Button>
                   </div>
                 </Row>

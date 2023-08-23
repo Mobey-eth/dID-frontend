@@ -579,9 +579,9 @@ const faucetABI = [
     name: "listProfiles",
     outputs: [
       {
-        internalType: "address[]",
+        internalType: "string[]",
         name: "",
-        type: "address[]",
+        type: "string[]",
       },
     ],
     stateMutability: "view",
@@ -711,8 +711,11 @@ const faucetABI = [
 
 export const faucetContract = (provider) => {
   return new ethers.Contract(
-    "0xa76bA071059078f0266c73212FeD6C1ed00b71a7",
+    "0x541Bc482A20CBEd630bd9b236b9B10ab4998c9e7",
     faucetABI,
     provider
   );
 };
+
+// new contract = 0x541Bc482A20CBEd630bd9b236b9B10ab4998c9e7
+// old contract = 0x4471d975e436195A6581FC04A62e433166FA7394
