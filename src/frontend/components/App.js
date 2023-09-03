@@ -93,6 +93,7 @@ function App() {
                     nft={nft}
                     dIDcontract={stakingContract}
                     signer={signerr}
+                    account={account}
                   />
                 }
               />

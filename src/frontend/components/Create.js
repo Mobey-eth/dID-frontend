@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import {
   Row,
@@ -13,48 +13,7 @@ import img from "./green.jpg";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
-const Create = ({ marketplace, nft, dIDcontract, signer }) => {
-  /*
-  const [image, setImage] = useState("");
-  const [price, setPrice] = useState(null);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const uploadToIPFS = async (event) => {
-    event.preventDefault();
-    const file = event.target.files[0];
-    if (typeof file !== "undefined") {
-      try {
-        const result = await client.add(file);
-        console.log(result);
-        setImage(`https://ipfs.infura.io/ipfs/${result.path}`);
-      } catch (error) {
-        console.log("ipfs image upload error: ", error);
-      }
-    }
-  };
-  const createNFT = async () => {
-    if (!image || !price || !name || !description) return;
-    try {
-      const result = await client.add(
-        JSON.stringify({ image, price, name, description })
-      );
-      mintThenList(result);
-    } catch (error) {
-      console.log("ipfs uri upload error: ", error);
-    }
-  };
-  const mintThenList = async (result) => {
-    const uri = `https://ipfs.infura.io/ipfs/${result.path}`;
-    // mint nft
-    await (await nft.mint(uri)).wait();
-    // get tokenId of new nft
-    const id = await nft.tokenCount();
-    // approve marketplace to spend nft
-    await (await nft.setApprovalForAll(marketplace.address, true)).wait();
-    // add nft to marketplace
-    const listingPrice = ethers.utils.parseEther(price.toString());
-    await (await marketplace.makeItem(nft.address, id, listingPrice)).wait();
-  }; */
+const Create = ({ marketplace, nft, dIDcontract, signer, account }) => {
   // new logic
   const [stakeError, setStakeError] = useState("");
   const [stakeSuccess, setStakeSuccess] = useState("");
@@ -65,32 +24,18 @@ const Create = ({ marketplace, nft, dIDcontract, signer }) => {
   const [walet, setWallet] = useState("");
   const [docName, setDocName] = useState("");
   const [docLink, setDocLink] = useState("");
+  const [studentData, setStudentData] = useState("");
+  const [isStudent, setIsStudent] = useState("");
 
   const stakeCACHandler = async () => {
     setStakeError("");
     setStakeSuccess("");
     try {
-      // let name = "Olalomi Suleiman";
-      // let regno = "2017100100";
-      // let dept = "EEE";
-
-      // tokenAmount = tokenAmount.toString();
-      // TO SET APPROVE FIRST
-      // const tokenContractWSigner = cTokenContract.connect(signer);
-      // const respZero = await tokenContractWSigner.approve(
-      //   StakeAddy,
-      //   tokenAmount
-      // );
-      // console.log(respZero);
-      // create student
-
       const stakeContractWSigner = dIDcontract.connect(signer);
       const resp = await stakeContractWSigner.mint(Name, regNo, department);
       console.log(resp);
       settransactionData(resp.hash);
-      setStakeSuccess(
-        `Student successfully created at\n https://mumbai.polygonscan.com/tx/${transactionData}`
-      );
+      setStakeSuccess(`Student successfully created here`);
     } catch (e) {
       console.log("Error: " + e);
       setStakeError(e.message);
@@ -101,36 +46,50 @@ const Create = ({ marketplace, nft, dIDcontract, signer }) => {
     setStakeError("");
     setStakeSuccess("");
     try {
-      // let name = "Olalomi Suleiman";
-      // let regno = "2017100100";
-      // let dept = "EEE";
-
-      // tokenAmount = tokenAmount.toString();
-      // TO SET APPROVE FIRST
-      // const tokenContractWSigner = cTokenContract.connect(signer);
-      // const respZero = await tokenContractWSigner.approve(
-      //   StakeAddy,
-      //   tokenAmount
-      // );
-      // console.log(respZero);
-      // create student
-
       const profileContractWSigner = dIDcontract.connect(signer);
       const resp = await profileContractWSigner.createProfile(
         walet,
         docName,
         docLink
       );
-      console.log(resp);
-      settransactionData(resp.hash);
-      setStakeSuccess(
-        `Student Document successfully created at \n https://mumbai.polygonscan.com/tx/${transactionData}`
-      );
+      const reciept = await resp.wait();
+      settransactionData(reciept.transactionHash);
+      setStakeSuccess(`Student Document successfully created here`);
     } catch (e) {
       console.log("Error: " + e);
       setStakeError(e.message);
     }
   };
+
+  const getStudentData = async () => {
+    try {
+      const getStudentWSigner = dIDcontract.connect(signer);
+      const hasStudent = await getStudentWSigner.hasStudent(account);
+      const getStudent = await getStudentWSigner.getStudent(account);
+
+      setStudentData(getStudent);
+      setIsStudent(hasStudent);
+      //console.log(getStudent);
+      // console.log(account);
+      // console.log(hasStudent);
+    } catch (e) {
+      console.log("Error: " + e);
+    }
+  };
+
+  const logStudentInfo = () => {
+    if (isStudent) {
+      console.log(studentData.name);
+      console.log(studentData.regNo.toString());
+      console.log(studentData.department);
+    }
+  };
+
+  useEffect(() => {
+    getStudentData();
+    //logStudentInfo();
+  }, [studentData, account]);
+
   return (
     <div className="">
       <Row className="m-2">
@@ -144,56 +103,66 @@ const Create = ({ marketplace, nft, dIDcontract, signer }) => {
         <Col className="mt-4">
           <Container>
             <Stack gap={3}>
-              <div className="row">
-                <main
-                  role="main"
-                  className="col-lg-12 mx-auto"
-                  style={{ maxWidth: "1000px" }}
-                >
-                  <div className="content mx-auto">
-                    <Row className="g-4">
-                      <Form.Control
-                        onChange={(e) => setName(e.target.value)}
-                        size="lg"
-                        required
-                        type="text"
-                        placeholder="Name"
-                      />
-                      <Form.Control
-                        onChange={(e) => setDepartment(e.target.value)}
-                        size="lg"
-                        required
-                        type="text"
-                        placeholder="Department"
-                      />
-                      <Form.Control
-                        onChange={(e) => setRegno(e.target.value)}
-                        size="lg"
-                        required
-                        type="number"
-                        placeholder="Registration Number"
-                      />
-                      <div className="d-grid px-0">
-                        <Button
-                          onClick={stakeCACHandler}
+              {/* changes here */}
+              {isStudent ? ( // Conditionally render the student info if isStudent is true
+                <div>
+                  <h3>Student Information</h3>
+                  <p>
+                    <strong>Name:</strong> {studentData.name}
+                  </p>
+                  <p>
+                    <strong>Registration Number:</strong>{" "}
+                    {studentData.regNo.toString()}
+                  </p>
+                  <p>
+                    <strong>Department:</strong> {studentData.department}
+                  </p>
+                </div>
+              ) : (
+                <div className="row">
+                  <main
+                    role="main"
+                    className="col-lg-12 mx-auto"
+                    style={{ maxWidth: "1000px" }}
+                  >
+                    <div className="content mx-auto">
+                      <Row className="g-4">
+                        <Form.Control
+                          onChange={(e) => setName(e.target.value)}
                           size="lg"
-                          variant="outline-success"
-                        >
-                          Create Student ID
-                        </Button>
-                      </div>
-                      <div className="mt-5">
-                        {stakeError && (
-                          <div className="withdraw-error">{stakeError}</div>
-                        )}
-                        {stakeSuccess && (
-                          <div className="withdraw-success">{stakeSuccess}</div>
-                        )}{" "}
-                      </div>
-                    </Row>
-                  </div>
-                </main>
-              </div>
+                          required
+                          type="text"
+                          placeholder="Name"
+                        />
+                        <Form.Control
+                          onChange={(e) => setDepartment(e.target.value)}
+                          size="lg"
+                          required
+                          type="text"
+                          placeholder="Department"
+                        />
+                        <Form.Control
+                          onChange={(e) => setRegno(e.target.value)}
+                          size="lg"
+                          required
+                          type="number"
+                          placeholder="Registration Number"
+                        />
+                        <div className="d-grid px-0">
+                          <Button
+                            onClick={stakeCACHandler}
+                            size="lg"
+                            variant="outline-success"
+                          >
+                            Create Student ID
+                          </Button>
+                        </div>
+                      </Row>
+                    </div>
+                  </main>
+                </div>
+              )}
+
               <div className="row">
                 <main
                   role="main"
@@ -231,6 +200,22 @@ const Create = ({ marketplace, nft, dIDcontract, signer }) => {
                         >
                           ADD DOCUMENT
                         </Button>
+                      </div>
+                      <div className="mt-5">
+                        {stakeError && (
+                          <div className="withdraw-error">{stakeError}</div>
+                        )}
+                        {stakeSuccess && (
+                          <div className="withdraw-success">
+                            <a
+                              href={`https://mumbai.polygonscan.com/tx/${transactionData}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {stakeSuccess}
+                            </a>
+                          </div>
+                        )}{" "}
                       </div>
                     </Row>
                   </div>

@@ -711,11 +711,11 @@ const faucetABI = [
 
 export const faucetContract = (provider) => {
   return new ethers.Contract(
-    "0x541Bc482A20CBEd630bd9b236b9B10ab4998c9e7",
+    "0x52431E400898Dbb9b8b90c554BAc455505F8714D",
     faucetABI,
     provider
   );
 };
 
-// new contract = 0x541Bc482A20CBEd630bd9b236b9B10ab4998c9e7
+// new contract = 0x52431E400898Dbb9b8b90c554BAc455505F8714D
 // old contract = 0x4471d975e436195A6581FC04A62e433166FA7394

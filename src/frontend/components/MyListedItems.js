@@ -59,9 +59,7 @@ export default function MyListedItems({
       const resp = await stakeContractWSigner.approve(walet);
       console.log(resp);
       settransactionData(resp.hash);
-      setStakeSuccess(
-        `Student successfully Approved at \n https://mumbai.polygonscan.com/tx/${transactionData}`
-      );
+      setStakeSuccess(`Student successfully Approved here`);
     } catch (e) {
       console.log("Error: " + e);
       setStakeError(e.message);
@@ -77,9 +75,7 @@ export default function MyListedItems({
       console.log(resp);
       // console.log(signer);
       settransactionData(resp.hash);
-      setStakeSuccess(
-        `Student approval successfully revoked at\n https://mumbai.polygonscan.com/tx/${transactionData}`
-      );
+      setStakeSuccess(`Student approval successfully revoked here`);
     } catch (e) {
       console.log("Error: " + e);
       setStakeError(e.message);
@@ -94,9 +90,7 @@ export default function MyListedItems({
       const resp = await profileContractWSigner.mint(Name, regNo, department);
       console.log(resp);
       settransactionData(resp.hash);
-      setStakeSuccess(
-        `Student successfully created at \n https://mumbai.polygonscan.com/tx/${transactionData}`
-      );
+      setStakeSuccess(`Student successfully created at here`);
     } catch (e) {
       console.log("Error: " + e);
       setStakeError(e.message);
@@ -115,9 +109,7 @@ export default function MyListedItems({
       );
       console.log(resp);
       settransactionData(resp.hash);
-      setStakeSuccess(
-        `Student Document successfully created at \n https://mumbai.polygonscan.com/tx/${transactionData}`
-      );
+      setStakeSuccess(`Student Document successfully created here`);
     } catch (e) {
       console.log("Error: " + e);
       setStakeError(e.message);
@@ -261,7 +253,15 @@ export default function MyListedItems({
                         <div className="withdraw-error">{stakeError}</div>
                       )}
                       {stakeSuccess && (
-                        <div className="withdraw-success">{stakeSuccess}</div>
+                        <div className="withdraw-success">
+                          <a
+                            href={`https://mumbai.polygonscan.com/tx/${transactionData}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {stakeSuccess}
+                          </a>
+                        </div>
                       )}{" "}
                     </div>
                   </div>

@@ -6,7 +6,13 @@ const Navigation = ({ web3Handler, account }) => {
     <Navbar expand="lg" bg="success" variant="dark">
       <Container>
         <Navbar.Brand href="/">
-          <img src="https://upload.wikimedia.org/wikipedia/en/1/16/FUTO_logo.png" width="40" height="40" className="" alt="" />
+          <img
+            src="https://upload.wikimedia.org/wikipedia/en/1/16/FUTO_logo.png"
+            width="40"
+            height="40"
+            className=""
+            alt=""
+          />
           &nbsp; DECENTRALIZED ID
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -28,7 +34,7 @@ const Navigation = ({ web3Handler, account }) => {
           <Nav>
             {account ? (
               <Nav.Link
-                href={`https://etherscan.io/address/${account}`}
+                href={`https://mumbai.polygonscan.com/address/${account}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="button nav-button btn-sm mx-4"
