@@ -1,4 +1,4 @@
-# NFT Marketplace
+# Decentralized Identity Management System
 
 ## Technology Stack & Tools
 
@@ -18,12 +18,10 @@
 
 ### 2. Install Dependencies:
 ```
-$ cd nft_marketplace
 $ npm install
 ```
 ### 3. Boot up local development blockchain
 ```
-$ cd nft_marketplace
 $ npx hardhat node
 ```
 
